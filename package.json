@@ -1,0 +1,10 @@
+{
+    "author": "Corban Thompson",
+    "dependencies": {
+        "discord.js": "^12.1.1"
+    },
+    "description": "Spy Bot",
+    "main": "bot.js",
+    "name": "spy-bot",
+    "version": "0.0.1"
+}

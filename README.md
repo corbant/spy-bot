@@ -1,3 +1,2 @@
-# Team Maker Bot
-
-
+# Spybot
+# Makes teams for spyrate and pirate games in Sea Of Theives

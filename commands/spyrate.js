@@ -2,37 +2,50 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: 'spyrate',
-    description: 'Collects the number of reactions on the message.',
-    usage: '<number of users to collect>',
+    description: 'Collects the users that react to a message to play a game, and creates teams of 4',
+    usage: '<number of teams to make> (NOTE: giving no argument defaults to 2)',
+    guildOnly: true,
     cooldown: 3,
     execute(message, args) {
+
+        if (args[0] && isNaN(args[0]) || args[0] && args[0] < 1) {
+            message.channel.send("This is not a valid argument");
+            return;
+        }
 
         const filter = (reaction, user) => {
             return user.id ;
         };
 
-        message.channel.send("React to this message to join the game!").then(sentMessage => {
-            const collector = new Discord.ReactionCollector(sentMessage, filter, { maxUsers: !args.length ? 8 : args[0] });
+        message.channel.send(`Ahoy Mateys, ${message.author} is looking for ${!args.length ? 7 : args[0] * 4 - 1} other players for a spyrate game. React to this message to join the game!`).then(sentMessage => {
+            const collector = new Discord.ReactionCollector(sentMessage, filter, { maxUsers: !args.length ? 7 : args[0] * 4 - 1 });
 
             collector.on('collect', (reaction, user) => {
-                message.channel.send(`${user} is joining the game!`);
+                message.channel.send(`${user} is joining the game! Watch out ye scallywags`);
             });
 
             collector.on('end', (collected, reason) => {
                 //message.channel.send(`Collected ${collected.size} items`);
                 const arr = Array.from(collector.users.values());
+                arr.push(message.author);
                 //message.channel.send(`Users who reacted: ${arr}`);
                 shuffle(arr);
-                message.channel.send("Teams are as follows:");
+
+                var mssgText = "Teams are as follows:";
+                //message.channel.send("Teams are as follows:");
                 //for each team
-                for (var i = 0; i < Math.ceil(arr.length / 4); i++) {
+                for (var i = 0; i <= !args.length ? 2 : args[0]; i++) {
                     const offset = 4 * i;
-                    message.channel.send(`Team ${i + 1}: ${arr[0 + offset]}, ${arr[1 + offset]}, ${arr[2 + offset]}, ${arr[3 + offset]}`);
-                    message.client.users.fetch(arr[getRandomInt(arr.length - 1) + offset].id).then(spy => {
+                    mssgText += `\nTeam ${i + 1}: ${arr[0 + offset]}, ${arr[1 + offset]}, ${arr[2 + offset]}, ${arr[3 + offset]}`;
+                    //message.channel.send(`Team ${i + 1}: ${arr[0 + offset]}, ${arr[1 + offset]}, ${arr[2 + offset]}, ${arr[3 + offset]}`);
+                    message.client.users.fetch(arr[getRandomInt(3) + offset].id).then(spy => {
                         spy.send("You are the spy for this game!");
                     });
                 }
-                message.channel.send("Let the games begin! Have fun!");
+                mssgText += "\nSpies have been sent a DM.";
+                mssgText += "\nRaise the anchors and set sail! Let the games begin";
+                //message.channel.send("Raise the anchors and set sail! Let the games begin");
+                message.channel.send(mssgText);
             });
 
         });

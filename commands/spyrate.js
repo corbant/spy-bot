@@ -14,7 +14,7 @@ module.exports = {
         }
 
         const filter = (reaction, user) => {
-            return user.id ;
+            return user.id !== message.author.id && reaction.emoji.name === 'spy';
         };
 
         message.channel.send(`Ahoy Mateys, ${message.author} is looking for ${!args.length ? 7 : args[0] * 4 - 1} other players for a spyrate game. React to this message to join the game!`).then(sentMessage => {

@@ -19,7 +19,7 @@ module.exports = {
         }
 
         const filter = (reaction, user) => {
-            return user.id;
+            return user.id !== message.author.id && reaction.emoji.name === 'spy';
         };
 
         message.channel.send(`Ahoy Mateys, ${message.author} is looking for ${args[1] * (args[0] == "brigs" ? 3 : 2) - 1 } other players for a pirate game. React to this message to join the game!`).then(sentMessage => {
@@ -48,7 +48,7 @@ module.exports = {
                     for (var i = 0; i < args[1]; i++) {
                         const offset = 2 * i;
                         mssgText += `\nTeam ${i + 1}: ${arr[0 + offset]}, ${arr[1 + offset]}`;
-                        message.channel.send(`Team ${i + 1}: ${arr[0 + offset]}, ${arr[1 + offset]}`);
+                        //message.channel.send(`Team ${i + 1}: ${arr[0 + offset]}, ${arr[1 + offset]}`);
                     }
                 }
                 mssgText += "\n Raise the anchors and set sail! Let the games begin";

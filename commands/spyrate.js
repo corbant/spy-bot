@@ -1,3 +1,4 @@
+const fs = require('fs');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -25,27 +26,32 @@ module.exports = {
             });
 
             collector.on('end', (collected, reason) => {
-                //message.channel.send(`Collected ${collected.size} items`);
                 const arr = Array.from(collector.users.values());
                 arr.push(message.author);
-                //message.channel.send(`Users who reacted: ${arr}`);
                 shuffle(arr);
 
+                var logText;
                 var mssgText = "Teams are as follows:";
-                //message.channel.send("Teams are as follows:");
                 //for each team
                 for (var i = 0; i <= !args.length ? 2 : args[0]; i++) {
                     const offset = 4 * i;
                     mssgText += `\nTeam ${i + 1}: ${arr[0 + offset]}, ${arr[1 + offset]}, ${arr[2 + offset]}, ${arr[3 + offset]}`;
-                    //message.channel.send(`Team ${i + 1}: ${arr[0 + offset]}, ${arr[1 + offset]}, ${arr[2 + offset]}, ${arr[3 + offset]}`);
+                    logText += `\nTeam ${i + 1}: ${arr[0 + offset].username}, ${arr[1 + offset].username}, ${arr[2 + offset].username}, ${arr[3 + offset].username}`;
                     message.client.users.fetch(arr[getRandomInt(3) + offset].id).then(spy => {
                         spy.send("You are the spy for this game!");
+                        logText += `\nSpy: ${spy}`;
                     });
                 }
                 mssgText += "\nSpies have been sent a DM.";
-                mssgText += "\nRaise the anchors and set sail! Let the games begin";
-                //message.channel.send("Raise the anchors and set sail! Let the games begin");
+                mssgText += "\nScuttle your ships and set sail! Let the games begin";
                 message.channel.send(mssgText);
+
+                try {
+                    fs.appendFileSync('./leaderboard/gameslog.txt', `Spyrate game ${new Date().toLocaleString()}:${logText}\n\n`);
+                } catch (e) {
+                    console.log('error', e);
+                }
+                
             });
 
         });

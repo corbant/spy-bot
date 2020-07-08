@@ -6,6 +6,7 @@
     <RootNamespace>spy-bot</RootNamespace>
     <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
     <NodeExePath>C:\Program Files\nodejs\node.exe</NodeExePath>
+    <ScriptArguments>Njk4Mjk2NjEyNjc3NDg0NjE0.Xr84qg.YFCWBeKrQgVQR6tU756WXcP2asU</ScriptArguments>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -32,15 +33,23 @@
   <ItemGroup>
     <Content Include="bot.js" />
     <Content Include="commands\help.js" />
+    <Content Include="commands\create-leaderboard.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="commands\leaderboard.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="commands\pirate.js" />
     <Content Include="commands\spyrate.js" />
     <Content Include="config.json" />
+    <Content Include="leaderboard\gameslog.txt" />
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="commands\" />
+    <Folder Include="leaderboard\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
 </Project>

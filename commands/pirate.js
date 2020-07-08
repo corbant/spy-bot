@@ -1,3 +1,4 @@
+const fs = require('fs');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -30,30 +31,34 @@ module.exports = {
             });
 
             collector.on('end', (collected, reason) => {
-                //message.channel.send(`Collected ${collected.size} items`);
                 const arr = Array.from(collector.users.values());
                 arr.push(message.author);
-                //message.channel.send(`Users who reacted: ${arr}`);
                 shuffle(arr);
+
+                var logText = '';
                 var mssgText = "Teams are as follows:";
-                //message.channel.send("Teams are as follows:");
                 //for each team
                 if (args[0] == "brigs") {
                     for (var i = 0; i < args[1]; i++) {
                         const offset = 3 * i;
                         mssgText += `\nTeam ${i + 1}: ${arr[0 + offset]}, ${arr[1 + offset]}, ${arr[2 + offset]}`;
-                        //message.channel.send(`Team ${i + 1}: ${arr[0 + offset]}, ${arr[1 + offset]}, ${arr[2 + offset]}`);
+                        logText += `\nTeam ${i + 1}: ${arr[0 + offset].username}, ${arr[1 + offset].username}, ${arr[2 + offset].username}`;
                     }
                 } else {
                     for (var i = 0; i < args[1]; i++) {
                         const offset = 2 * i;
                         mssgText += `\nTeam ${i + 1}: ${arr[0 + offset]}, ${arr[1 + offset]}`;
-                        //message.channel.send(`Team ${i + 1}: ${arr[0 + offset]}, ${arr[1 + offset]}`);
+                        logText += `\nTeam ${i + 1}: ${arr[0 + offset].username}, ${arr[1 + offset].username}`;
                     }
                 }
-                mssgText += "\n Raise the anchors and set sail! Let the games begin";
-                //message.channel.send("Raise the anchors and set sail! Let the games begin");
+                mssgText += "\nScuttle your ships and set sail! Let the games begin";
                 message.channel.send(mssgText);
+
+                try {
+                    fs.appendFileSync('./leaderboard/gameslog.txt', `Pirate ${args[0]} game ${new Date().toLocaleString()}:${logText}\n\n`);
+                } catch (e) {
+                    console.log('error', e);
+                }
             });
 
         });
